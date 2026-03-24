@@ -1,0 +1,9 @@
+body { font-family: 'Prompt', sans-serif; }
+.dragover { 
+    border-color: #8b5cf6 !important; 
+    background-color: #f5f3ff !important; 
+    transform: scale(1.02);
+}
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+#qrcode img { margin: auto; border-radius: 0.5rem; }
