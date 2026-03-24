@@ -116,13 +116,13 @@ copyBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => location.reload());
 
-window.addEventListener('click', (e) => {
-    const emojis = ['พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย'];
+window.addEventListener('pointerdown', (e) => {
+    const emojis = ['พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย'];
     const emoji = document.createElement('div');
     emoji.className = 'click-emoji';
     emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
     emoji.style.left = e.clientX + 'px';
     emoji.style.top = e.clientY + 'px';
     document.body.appendChild(emoji);
-    setTimeout(() => emoji.remove(), 1000);
+    setTimeout(() => emoji.remove(), 800);
 });
