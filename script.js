@@ -8,7 +8,6 @@ const uploadBtn = document.getElementById('upload-btn');
 const progressArea = document.getElementById('progress-area');
 const progressBar = document.getElementById('progress-bar');
 const progressPercent = document.getElementById('progress-percent');
-const progressText = document.getElementById('progress-text');
 const resultArea = document.getElementById('result-area');
 const resultLink = document.getElementById('result-link');
 const copyBtn = document.getElementById('copy-btn');
@@ -27,17 +26,10 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
-function showError(msg) {
-    errorMessage.textContent = msg;
-    errorMessage.classList.remove('hidden');
-}
-
-function hideError() { errorMessage.classList.add('hidden'); }
-
 function handleFile(file) {
     if (!file) return;
     selectedFile = file;
-    hideError();
+    errorMessage.classList.add('hidden');
     dropZone.classList.add('hidden');
     fileInfo.classList.remove('hidden');
     fileName.textContent = file.name;
@@ -65,15 +57,15 @@ removeFileBtn.addEventListener('click', () => {
 
 uploadBtn.addEventListener('click', async () => {
     if (!selectedFile) return;
+    
     uploadBtn.classList.add('hidden');
-    removeFileBtn.classList.add('hidden');
+    fileInfo.classList.add('hidden');
     progressArea.classList.remove('hidden');
-    hideError();
 
     try {
         const serverRes = await fetch('https://api.gofile.io/servers', { method: 'GET' });
         const serverData = await serverRes.json();
-        if (serverData.status !== 'ok') throw new Error("ไม่สามารถเชื่อมต่อ Server ได้");
+        if (serverData.status !== 'ok') throw new Error("Server Gofile มีปัญหา กรุณาลองใหม่");
         const server = serverData.data.servers[0].name;
 
         const formData = new FormData();
@@ -91,15 +83,21 @@ uploadBtn.addEventListener('click', async () => {
         xhr.addEventListener('load', () => {
             if (xhr.status >= 200 && xhr.status < 300) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.status === 'ok') showSuccess(response.data.downloadPage);
-                else handleUploadError(response.error || "เกิดข้อผิดพลาด");
-            } else handleUploadError("เซิร์ฟเวอร์ไม่ตอบสนอง");
+                if (response.status === 'ok') {
+                    showSuccess(response.data.downloadPage);
+                } else {
+                    handleError(response.error || "อัปโหลดล้มเหลว");
+                }
+            } else {
+                handleError("เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+            }
         });
 
-        xhr.addEventListener('error', () => handleUploadError("การเชื่อมต่อล้มเหลว"));
         xhr.open('POST', `https://${server}.gofile.io/contents/uploadfile`);
         xhr.send(formData);
-    } catch (error) { handleUploadError(error.message); }
+    } catch (error) {
+        handleError(error.message);
+    }
 });
 
 function showSuccess(link) {
@@ -107,13 +105,13 @@ function showSuccess(link) {
     resultArea.classList.remove('hidden');
     resultLink.value = link;
     qrcodeContainer.innerHTML = "";
-    new QRCode(qrcodeContainer, { text: link, width: 150, height: 150 });
+    new QRCode(qrcodeContainer, { text: link, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.H });
 }
 
-function handleUploadError(msg) {
-    showError(msg);
+function handleError(msg) {
+    errorMessage.textContent = msg;
+    errorMessage.classList.remove('hidden');
     uploadBtn.classList.remove('hidden');
-    removeFileBtn.classList.remove('hidden');
     progressArea.classList.add('hidden');
 }
 
@@ -122,10 +120,11 @@ copyBtn.addEventListener('click', () => {
     document.execCommand('copy');
     const icon = copyBtn.querySelector('i');
     icon.className = 'fa-solid fa-check';
-    copyBtn.classList.add('bg-green-600');
-    setTimeout(() => { icon.className = 'fa-regular fa-copy'; copyBtn.classList.remove('bg-green-600'); }, 2000);
+    copyBtn.classList.replace('bg-gray-900', 'bg-green-600');
+    setTimeout(() => { 
+        icon.className = 'fa-regular fa-copy'; 
+        copyBtn.classList.replace('bg-green-600', 'bg-gray-900');
+    }, 2000);
 });
 
-resetBtn.addEventListener('click', () => {
-    location.reload();
-});
+resetBtn.addEventListener('click', () => location.reload());
