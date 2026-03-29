@@ -17,6 +17,13 @@
     const resetBtn = document.getElementById('reset-btn');
     const errorMessage = document.getElementById('error-message');
     const qrcodeContainer = document.getElementById('qrcode');
+    
+    const openHistoryBtn = document.getElementById('open-history-btn');
+    const closeHistoryBtn = document.getElementById('close-history-btn');
+    const historyModal = document.getElementById('history-modal');
+    const historyModalContent = document.getElementById('history-modal-content');
+    const historyList = document.getElementById('history-list');
+    const emptyHistory = document.getElementById('empty-history');
 
     let selectedFile = null;
 
@@ -28,6 +35,136 @@
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('th-TH', { 
+            year: 'numeric', month: 'short', day: 'numeric', 
+            hour: '2-digit', minute: '2-digit' 
+        });
+    }
+
+    function saveToHistory(name, size, link) {
+        let history = JSON.parse(localStorage.getItem('gofile_history') || '[]');
+        history.unshift({
+            id: Date.now().toString(),
+            name: name,
+            size: size,
+            link: link,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('gofile_history', JSON.stringify(history));
+    }
+
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem('gofile_history') || '[]');
+        historyList.innerHTML = '';
+        
+        if (history.length === 0) {
+            emptyHistory.classList.remove('hidden');
+            emptyHistory.classList.add('flex');
+            return;
+        }
+
+        emptyHistory.classList.add('hidden');
+        emptyHistory.classList.remove('flex');
+
+        history.forEach((item, index) => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item bg-white border border-gray-100 rounded-2xl p-4 shadow-sm transition-all duration-300';
+            
+            historyItem.innerHTML = `
+                <div class="flex justify-between items-center cursor-pointer select-none" onclick="toggleHistoryItem('${item.id}')">
+                    <div class="flex items-center overflow-hidden w-full pr-3">
+                        <div class="bg-indigo-50 p-2.5 rounded-xl mr-3 text-indigo-500 shrink-0">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <div class="overflow-hidden w-full">
+                            <p class="text-sm font-semibold text-gray-800 truncate">${item.name}</p>
+                            <div class="flex items-center text-[11px] text-gray-400 mt-0.5">
+                                <span>${item.size}</span>
+                                <span class="mx-1.5">•</span>
+                                <span>${formatDate(item.date)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-gray-300 transition-transform duration-300 chevron-icon shrink-0">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="history-item-content border-t border-gray-50 mt-3 pt-0" id="content-${item.id}">
+                    <div class="bg-gray-50 rounded-xl p-4 flex flex-col items-center justify-center mb-4">
+                        <div id="qr-${item.id}" class="p-1 bg-white rounded-lg shadow-sm"></div>
+                    </div>
+                    <div class="relative group">
+                        <input type="text" id="link-${item.id}" readonly value="${item.link}" class="w-full bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500 block p-3 pr-12 outline-none transition select-text">
+                        <button onclick="copyHistoryLink('${item.id}')" id="copybtn-${item.id}" class="absolute right-1.5 top-1.5 bottom-1.5 bg-gray-900 hover:bg-black text-white px-3 rounded-lg transition duration-200 flex items-center justify-center">
+                            <i class="fa-regular fa-copy text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            historyList.appendChild(historyItem);
+        });
+    }
+
+    window.toggleHistoryItem = function(id) {
+        const itemContent = document.getElementById(`content-${id}`);
+        const parentItem = itemContent.closest('.history-item');
+        const isExpanded = parentItem.classList.contains('expanded');
+        
+        document.querySelectorAll('.history-item.expanded').forEach(el => {
+            el.classList.remove('expanded');
+        });
+
+        if (!isExpanded) {
+            parentItem.classList.add('expanded');
+            const qrContainer = document.getElementById(`qr-${id}`);
+            const linkInput = document.getElementById(`link-${id}`);
+            if (qrContainer.innerHTML === "") {
+                new QRCode(qrContainer, { text: linkInput.value, width: 100, height: 100 });
+            }
+        }
+    };
+
+    window.copyHistoryLink = function(id) {
+        const linkInput = document.getElementById(`link-${id}`);
+        const copyBtn = document.getElementById(`copybtn-${id}`);
+        const icon = copyBtn.querySelector('i');
+        
+        linkInput.select();
+        document.execCommand('copy');
+        
+        icon.className = 'fa-solid fa-check text-xs';
+        copyBtn.classList.replace('bg-gray-900', 'bg-green-600');
+        
+        setTimeout(() => { 
+            icon.className = 'fa-regular fa-copy text-xs'; 
+            copyBtn.classList.replace('bg-green-600', 'bg-gray-900');
+        }, 2000);
+    };
+
+    openHistoryBtn.addEventListener('click', () => {
+        loadHistory();
+        historyModal.classList.remove('opacity-0', 'pointer-events-none');
+        historyModalContent.classList.remove('scale-95');
+        historyModalContent.classList.add('scale-100');
+    });
+
+    closeHistoryBtn.addEventListener('click', () => {
+        historyModal.classList.add('opacity-0', 'pointer-events-none');
+        historyModalContent.classList.remove('scale-100');
+        historyModalContent.classList.add('scale-95');
+        setTimeout(() => {
+            document.querySelectorAll('.history-item.expanded').forEach(el => el.classList.remove('expanded'));
+        }, 300);
+    });
+
+    historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+            closeHistoryBtn.click();
+        }
+    });
 
     function handleFile(file) {
         if (!file) return;
@@ -81,7 +218,10 @@
             xhr.addEventListener('load', () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const response = JSON.parse(xhr.responseText);
-                    if (response.status === 'ok') showSuccess(response.data.downloadPage);
+                    if (response.status === 'ok') {
+                        showSuccess(response.data.downloadPage);
+                        saveToHistory(selectedFile.name, formatBytes(selectedFile.size), response.data.downloadPage);
+                    }
                     else handleError(response.error || "Upload failed");
                 } else handleError("Server Error");
             });
@@ -249,6 +389,8 @@
     window.addEventListener("mousemove", pointer.move.bind(pointer), false);
     window.addEventListener("touchmove", pointer.move.bind(pointer), false);
     window.addEventListener("pointerdown", (e) => {
+        if (e.target.closest('#history-modal-content') || e.target.closest('#open-history-btn')) return;
+        
         const emojis = ['พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย'];
         const emoji = document.createElement('div');
         emoji.className = 'click-emoji';
