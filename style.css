@@ -45,3 +45,29 @@ body {
     margin: auto;
     border-radius: 0.75rem;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.history-item-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.history-item.expanded .history-item-content {
+    max-height: 500px;
+    opacity: 1;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.history-item.expanded .chevron-icon {
+    transform: rotate(180deg);
+}
