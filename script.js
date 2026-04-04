@@ -391,7 +391,7 @@
     window.addEventListener("pointerdown", (e) => {
         if (e.target.closest('#history-modal-content') || e.target.closest('#open-history-btn')) return;
         
-        const emojis = ['พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย', 'แม่มึงตาย', 'พ่อมึงตาย'];
+        const emojis = [''];
         const emoji = document.createElement('div');
         emoji.className = 'click-emoji';
         emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
