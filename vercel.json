@@ -1,31 +1,5 @@
 {
   "version": 2,
   "public": true,
-  "builds": [
-    {
-      "src": "api/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/upload/(.*)",
-      "dest": "/api/server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "/api/server.js"
-    },
-    {
-      "src": "/(.*\\.(js|css|jpg|png|gif|ico|svg|woff|woff2|ttf|eot))",
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/server.js"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "buildCommand": "npm install"
 }

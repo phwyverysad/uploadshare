@@ -507,7 +507,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const uploadRes = await fetch('/upload/gofile', {
+            const uploadRes = await fetch('/api/upload/gofile', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -536,7 +536,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/catbox', {
+            const res = await fetch('/api/upload/catbox', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -566,7 +566,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/litterbox', {
+            const res = await fetch('/api/upload/litterbox', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -596,7 +596,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/tmpfiles', {
+            const res = await fetch('/api/upload/tmpfiles', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -626,7 +626,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/uguu', {
+            const res = await fetch('/api/upload/uguu', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -656,7 +656,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/fileio', {
+            const res = await fetch('/api/upload/fileio', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -686,7 +686,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/pomf', {
+            const res = await fetch('/api/upload/pomf', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
@@ -716,7 +716,7 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            const res = await fetch('/upload/0x0', {
+            const res = await fetch('/api/upload/0x0', {
                 method: 'POST',
                 body: formData,
                 signal: uploadAbortController?.signal
