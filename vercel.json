@@ -4,17 +4,9 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/api/upload/(.*)",
-      "dest": "/server.js"
-    },
     {
       "src": "/upload/(.*)",
       "dest": "/server.js"
@@ -24,12 +16,12 @@
       "dest": "/server.js"
     },
     {
-      "src": "/",
-      "dest": "/index.html"
+      "src": "/(.*\\.(js|css|jpg|png|gif|ico|svg|woff|woff2|ttf|eot))",
+      "dest": "/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/server.js"
     }
   ],
   "env": {

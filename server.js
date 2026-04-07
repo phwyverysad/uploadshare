@@ -463,6 +463,11 @@ app.get('/health', (req, res) => {
     });
 });
 
+// ── Catch-All SPA Fallback ───────────────────────────────────
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // ── Start Server ────────────────────────────────────────────
 app.listen(PORT, () => {
     console.log(`
