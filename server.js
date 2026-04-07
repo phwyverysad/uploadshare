@@ -49,10 +49,10 @@ app.get('/index.html', (req, res) => {
 // ── Upload Proxy Endpoints ──────────────────────────────────
 
 /**
- * POST /upload/gofile
+ * POST /api/upload/gofile
  * Gofile อัปโหลด
  */
-app.post('/upload/gofile', async (req, res) => {
+app.post('/api/upload/gofile', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -109,10 +109,10 @@ app.post('/upload/gofile', async (req, res) => {
 });
 
 /**
- * POST /upload/catbox
+ * POST /api/upload/catbox
  * Catbox อัปโหลด
  */
-app.post('/upload/catbox', async (req, res) => {
+app.post('/api/upload/catbox', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -159,10 +159,10 @@ app.post('/upload/catbox', async (req, res) => {
 });
 
 /**
- * POST /upload/litterbox
+ * POST /api/upload/litterbox
  * Litterbox อัปโหลด
  */
-app.post('/upload/litterbox', async (req, res) => {
+app.post('/api/upload/litterbox', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -210,10 +210,10 @@ app.post('/upload/litterbox', async (req, res) => {
 });
 
 /**
- * POST /upload/tmpfiles
+ * POST /api/upload/tmpfiles
  * Tmpfiles อัปโหลด
  */
-app.post('/upload/tmpfiles', async (req, res) => {
+app.post('/api/upload/tmpfiles', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -259,10 +259,10 @@ app.post('/upload/tmpfiles', async (req, res) => {
 });
 
 /**
- * POST /upload/uguu
+ * POST /api/upload/uguu
  * Uguu อัปโหลด
  */
-app.post('/upload/uguu', async (req, res) => {
+app.post('/api/upload/uguu', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -308,10 +308,10 @@ app.post('/upload/uguu', async (req, res) => {
 });
 
 /**
- * POST /upload/fileio
+ * POST /api/upload/fileio
  * File.io อัปโหลด
  */
-app.post('/upload/fileio', async (req, res) => {
+app.post('/api/upload/fileio', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -357,10 +357,10 @@ app.post('/upload/fileio', async (req, res) => {
 });
 
 /**
- * POST /upload/pomf
+ * POST /api/upload/pomf
  * Pomf อัปโหลด
  */
-app.post('/upload/pomf', async (req, res) => {
+app.post('/api/upload/pomf', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
@@ -406,10 +406,10 @@ app.post('/upload/pomf', async (req, res) => {
 });
 
 /**
- * POST /upload/0x0
+ * POST /api/upload/0x0
  * 0x0.st อัปโหลด
  */
-app.post('/upload/0x0', async (req, res) => {
+app.post('/api/upload/0x0', async (req, res) => {
     const bb = busboy({ headers: req.headers });
     let file = null;
 
